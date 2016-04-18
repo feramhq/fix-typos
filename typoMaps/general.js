@@ -3362,7 +3362,6 @@ export default {
 	relpacement: 'replacement',
 	remaing: 'remaining',
 	remeber: 'remember',
-	rememberable: 'memorable',
 	rememberance: 'remembrance',
 	remembrence: 'remembrance',
 	remenant: 'remnant',
