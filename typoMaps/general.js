@@ -2640,7 +2640,6 @@ export default {
 	novermber: 'november',
 	nowdays: 'nowadays',
 	nowe: 'now',
-	nto: 'not',
 	nucular: 'nuclear',
 	nuculear: 'nuclear',
 	nuisanse: 'nuisance',
