@@ -55,7 +55,7 @@ const typoMapObjects = [
 
 
 export default (options = {}) => {
-	const {entry, repo, authorSignature, commiterSignature} = options
+	const {entry, repo, authorSignature, committerSignature} = options
 	const filePath = entry.path()
 
 	return entry
@@ -101,7 +101,7 @@ export default (options = {}) => {
 		.then(() => repo.createCommitOnHead(
 			[filePath],
 			authorSignature,
-			commiterSignature,
+			committerSignature,
 			`Fix typos in ` + path.basename(filePath)
 		))
 		.catch(error => {
