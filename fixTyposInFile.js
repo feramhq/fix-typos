@@ -7,9 +7,9 @@ import isBinary from 'is-binary'
 
 import replaceTypos from './replaceTypos'
 
-import generalTypoMap from '../typoMaps/general'
-import styleTypoMap from '../typoMaps/style'
-import scriptTypoMap from '../typoMaps/script'
+import generalTypoMap from './typoMaps/general'
+import styleTypoMap from './typoMaps/style'
+import scriptTypoMap from './typoMaps/script'
 
 
 function isHumanReadable (filePath, fileContent) {
