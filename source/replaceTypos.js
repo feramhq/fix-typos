@@ -1,6 +1,10 @@
 import chalk from 'chalk'
-import util from 'util'
-const debuglog = util.debuglog('typos')
+import bunyan from 'bunyan'
+
+const log = bunyan.createLogger({
+	name: 'fix-typo',
+	level: 0,
+})
 
 function isLowerCase (string) {
 	return string === string.toLowerCase() &&
@@ -30,11 +34,11 @@ export default (fileContent, filePath, typoMap) => {
 					) +
 					p2
 
-				debuglog(
-					chalk.yellow(JSON.stringify(match)) +
-					' -> ' +
-					chalk.green(JSON.stringify(replacement)) +
-					chalk.gray(' in ' + filePath)
+				log.trace(
+					'%s -> %s in %s',
+					JSON.stringify(match),
+					JSON.stringify(replacement),
+					filePath,
 				)
 				return replacement
 			}

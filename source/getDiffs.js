@@ -1,40 +1,47 @@
 import getDiffForFile from './getDiffForFile'
+import bunyan from 'bunyan'
+
+const log = bunyan.createLogger({
+	name: 'patch-repo',
+	level: 0,
+})
 
 export default (options = {}) => {
-	const {fileTree, ignore} = options
-	const walker = fileTree.walk(true)
+	const {repo, ignore} = options
 
-	return new Promise((resolve, reject) => {
-		let fileCheckPromiseChain = Promise.resolve()
-		let filesCanBeFixed = false
-		let changes = []
+	return repo
+		.getHeadCommit()
+		.then(commit => commit.getTree())
+		.then(fileTree => new Promise((resolve, reject) => {
+			let fileCheckPromiseChain = Promise.resolve()
+			let filesCanBeFixed = false
+			let changes = []
 
-		walker.on('error', error => reject(error))
+			const walker = fileTree.walk(true)
 
-		walker.on('entry', (entry) => {
-			if (ignore instanceof RegExp &&
-				ignore.test(entry.path())
-			) {
-				return
-			}
+			walker.on('error', reject)
 
-			fileCheckPromiseChain = fileCheckPromiseChain
-				.then(() => {
-					return getDiffForFile(
+			walker.on('entry', (entry) => {
+				if (ignore instanceof RegExp && ignore.test(entry.path())) {
+					return
+				}
+
+				fileCheckPromiseChain = fileCheckPromiseChain
+					.then(() => getDiffForFile(
 						Object.assign({}, {entry}, options)
-					)
-				})
-				.then(fileChanges =>
-					changes.push(fileChanges)
-				)
-		})
+					))
+					.then(fileChanges => {
+						if (fileChanges) {
+							changes.push(fileChanges)
+						}
+					})
+			})
 
-		walker.on('end', () => {
-			resolve(
-				fileCheckPromiseChain.then(() => changes)
-			)
-		})
+			walker.on('end', () => resolve(
+				fileCheckPromiseChain
+					.then(() => changes)
+			))
 
-		walker.start()
-	})
+			walker.start()
+		}))
 }

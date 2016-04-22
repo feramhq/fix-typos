@@ -1,12 +1,15 @@
-import util from 'util'
-const debuglog = util.debuglog('tests')
-
 // Diff can only be required and not imported
 const diff = require('diff')
+import bunyan from 'bunyan'
 
 import replaceTypos from './replaceTypos'
 import typoMapObjects from './typoMaps'
 import isHumanReadable from './helpers/isHumanReadable'
+
+const log = bunyan.createLogger({
+	name: 'get-diff',
+	level: 0,
+})
 
 
 export default (options = {}) => {
@@ -25,6 +28,14 @@ export default (options = {}) => {
 			}
 
 			typoMapObjects.forEach(typoMapObject => {
+
+				log.trace(
+					'Check if %s is a %s file: %s',
+					filePath,
+					typoMapObject.name,
+					typoMapObject.test(filePath),
+				)
+
 				if (!typoMapObject.test(filePath)) {
 					return
 				}
@@ -41,20 +52,21 @@ export default (options = {}) => {
 			})
 
 			if (!contentWasChanged) {
-				debuglog('Nothing was fixed in %s', filePath)
+				log.debug('Nothing was fixed in %s', filePath)
 			}
-
-			return diff.createPatch(
-				filePath,
-				fileContent,
-				newFileContent,
-			)
+			else {
+				return diff.createPatch(
+					filePath,
+					fileContent,
+					newFileContent,
+				)
+			}
 		})
-		.then(diffs => {
-			debuglog(util.inspect(diffs, {depth: null, colors: true}))
-			return diffs
+		.then(diff => {
+			if (diff) {
+				log.debug({filePath, diff})
+				return diff
+			}
 		})
-		.catch(error =>
-			console.error(error.stack)
-		)
+		.catch(error => log.error(error))
 }

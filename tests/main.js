@@ -4,16 +4,16 @@ import fsp from 'fs-promise'
 
 import bunyan from 'bunyan'
 import nodegit, {Repository, Clone} from 'nodegit'
-import {getDiffs, patchFiles} from '../source/'
+import {getDiffs, patchRepo} from '../source/'
 
 const log = bunyan.createLogger({
 	name: 'tests',
 	level: 'trace',
 })
-const clonePath = path.join(__dirname, 'broken')
+const clonedRepoPath = path.join(__dirname, 'broken')
 
-Clone
-	.clone('https://github.com/ferambot/broken', clonePath)
+const changesPromise = Clone
+	.clone('https://github.com/ferambot/broken', clonedRepoPath)
 	.catch(error => {
 		// Ignore that git repo might already exist
 	})
@@ -21,18 +21,30 @@ Clone
 	// instead of using the repo instance
 	// which was return from the clone operation
 	// as it might not actually have been cloned
-	.then(() => Repository.open(clonePath))
-	.then(repo => repo.getHeadCommit()
-		.then(commit => commit.getTree())
-		.then(fileTree => getDiffs({
-			fileTree,
+	.then(() => Repository.open(clonedRepoPath))
+	.then(repo => getDiffs({repo}))
+	.then(changes => {
+		console.assert(
+			changes.length === 3,
+			'Expected 3 changes an not %s',
+			changes.length
+		)
+		log.info('Created changes ✔︎')
+		return changes
+	})
+	.catch(error => log.error(error))
+
+
+changesPromise
+	.then(changes => Repository
+		.open(clonedRepoPath)
+		.then(repo => patchRepo({
 			repo,
-			ignore: /typoMaps\/general\.js$/
+			changes,
 		}))
 	)
-	.then(changes => {
-		console.assert(changes.length === 3)
-		log.debug({changes})
+	.then(() => {
+		log.info('Patched repo ✔︎')
+		log.info('All tests passed ✔︎')
 	})
-	.then(() => log.info('All tests passed ✔︎'))
 	.catch(error => log.error(error))

@@ -1,4 +1,5 @@
 export default (filePath) => {
+	const flags = 'i'
 	const regex = new RegExp(
 		'\\.(' +
 		'javascript|js|jsx|' +
@@ -6,7 +7,8 @@ export default (filePath) => {
 		'typescript|ts|' +
 		'coffeescript|coffee' +
 		'livescript|ls' +
-		')$'
+		')$',
+		flags,
 	)
-	regex.test(filePath)
+	return regex.test(filePath)
 }

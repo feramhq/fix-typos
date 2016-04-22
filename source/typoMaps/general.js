@@ -2647,6 +2647,7 @@ export default {
 	nuisanse: 'nuisance',
 	nullabour: 'nullarbor',
 	numberous: 'numerous',
+	numers: 'numbers',
 	nuremburg: 'nuremberg',
 	nusance: 'nuisance',
 	nutritent: 'nutrient',

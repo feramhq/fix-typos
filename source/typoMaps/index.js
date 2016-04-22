@@ -13,12 +13,12 @@ export default [
 		test: () => true,
 	},
 	{
-		name: 'css',
+		name: 'style',
 		map: styleTypoMap,
 		test: isStyle,
 	},
 	{
-		name: 'js',
+		name: 'script',
 		map: scriptTypoMap,
 		test: isScript,
 	},
