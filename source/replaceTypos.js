@@ -1,4 +1,6 @@
 import chalk from 'chalk'
+import util from 'util'
+const debuglog = util.debuglog('typos')
 
 function isLowerCase (string) {
 	return string === string.toLowerCase() &&
@@ -28,7 +30,7 @@ export default (fileContent, filePath, typoMap) => {
 					) +
 					p2
 
-				console.log(
+				debuglog(
 					chalk.yellow(JSON.stringify(match)) +
 					' -> ' +
 					chalk.green(JSON.stringify(replacement)) +

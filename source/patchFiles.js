@@ -1,13 +1,12 @@
-import fixTyposInFile from './fixTyposInFile'
-
 export default (options = {}) => {
-	const {fileTree} = options
+	const {fileTree, shallReturnPatches} = options
 
 	return new Promise((resolve, reject) => {
 		let fileEditPromiseChain = Promise.resolve()
 		let commitWasCreated = false
 
 		const walker = fileTree.walk(true)
+
 		walker.on('error', error => reject(error))
 		walker.on('entry', (entry) => {
 			fileEditPromiseChain = fileEditPromiseChain
@@ -22,7 +21,6 @@ export default (options = {}) => {
 		})
 		walker.on('end', () => {
 			resolve(fileEditPromiseChain
-				.then(() => console.log())
 				.then(() => commitWasCreated)
 			)
 		})

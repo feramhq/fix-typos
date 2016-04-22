@@ -10,48 +10,10 @@ import replaceTypos from './replaceTypos'
 import generalTypoMap from './typoMaps/general'
 import styleTypoMap from './typoMaps/style'
 import scriptTypoMap from './typoMaps/script'
-
-
-function isHumanReadable (filePath, fileContent) {
-	return !isBinary(fileContent) &&
-		!/\.min\.(css|js|html)$/.test(filePath) &&
-		!/\.(css|js)\.map$/.test(filePath)
-}
-
-function isStyle (filePath) {
-	return /\.(css|styl|scss|sass|less)$/.test(filePath)
-}
-
-function isScript (filePath) {
-	const regex = new RegExp(
-		'\\.(' +
-		'javascript|js|jsx|' +
-		'ecmascript|es|es2015|' +
-		'typescript|ts|' +
-		'coffeescript|coffee' +
-		'livescript|ls' +
-		')$'
-	)
-	regex.test(filePath)
-}
-
-const typoMapObjects = [
-	{
-		name: 'general',
-		map: generalTypoMap,
-		test: () => true,
-	},
-	{
-		name: 'css',
-		map: styleTypoMap,
-		test: isStyle,
-	},
-	{
-		name: 'js',
-		map: scriptTypoMap,
-		test: isScript,
-	},
-]
+import isHumanReadable from './isHumanReadable'
+import isStyle from './isStyle'
+import isScript from './isScript'
+import typoMapObjects from './typoMaps'
 
 
 export default (options = {}) => {
