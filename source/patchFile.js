@@ -7,13 +7,10 @@ import isBinary from 'is-binary'
 
 import replaceTypos from './replaceTypos'
 
-import generalTypoMap from './typoMaps/general'
-import styleTypoMap from './typoMaps/style'
-import scriptTypoMap from './typoMaps/script'
-import isHumanReadable from './isHumanReadable'
-import isStyle from './isStyle'
-import isScript from './isScript'
 import typoMapObjects from './typoMaps'
+import isHumanReadable from './helpers/isHumanReadable'
+import isStyle from './helpers/isStyle'
+import isScript from './helpers/isScript'
 
 
 export default (options = {}) => {

@@ -6,8 +6,7 @@ const diff = require('diff')
 
 import replaceTypos from './replaceTypos'
 import typoMapObjects from './typoMaps'
-
-import isHumanReadable from './isHumanReadable'
+import isHumanReadable from './helpers/isHumanReadable'
 
 
 export default (options = {}) => {
