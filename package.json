@@ -2,7 +2,7 @@
   "name": "fix-typos",
   "version": "0.1.0",
   "description": "Module for feram to fix typos",
-  "main": "build/index.js",
+  "main": "build/getDiffs.js",
   "scripts": {
     "test": "babel-node tests/main | bunyan --output short --level info",
     "build": "babel --out-dir build source",
