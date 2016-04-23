@@ -4,7 +4,7 @@ import fsp from 'fs-promise'
 
 import bunyan from 'bunyan'
 import nodegit, {Repository, Clone} from 'nodegit'
-import {getDiffs, patchRepo} from '../source/'
+import getTypoPatches from '..'
 
 const log = bunyan.createLogger({
 	name: 'tests',
@@ -12,7 +12,7 @@ const log = bunyan.createLogger({
 })
 const clonedRepoPath = path.join(__dirname, 'broken')
 
-const changesPromise = Clone
+const patchesPromise = Clone
 	.clone('https://github.com/ferambot/broken', clonedRepoPath)
 	.catch(error => {
 		// Ignore that git repo might already exist
@@ -22,29 +22,14 @@ const changesPromise = Clone
 	// which was return from the clone operation
 	// as it might not actually have been cloned
 	.then(() => Repository.open(clonedRepoPath))
-	.then(repo => getDiffs({repo}))
-	.then(changes => {
+	.then(repo => getTypoPatches({repo}))
+	.then(patches => {
 		console.assert(
-			changes.length === 3,
-			'Expected 3 changes an not %s',
-			changes.length
+			patches.length === 3,
+			'Expected 3 patches an not %s',
+			patches.length
 		)
-		log.info('Created changes ✔︎')
-		return changes
-	})
-	.catch(error => log.error(error))
-
-
-changesPromise
-	.then(changes => Repository
-		.open(clonedRepoPath)
-		.then(repo => patchRepo({
-			repo,
-			changes,
-		}))
-	)
-	.then(() => {
-		log.info('Patched repo ✔︎')
-		log.info('All tests passed ✔︎')
+		log.info('Created patches ✔︎')
+		return patches
 	})
 	.catch(error => log.error(error))
