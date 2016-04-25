@@ -1,5 +1,6 @@
 import getDiffForFile from './getDiffForFile'
 import bunyan from 'bunyan'
+import packageData from '../package.json'
 
 const log = bunyan.createLogger({
 	name: 'patch-repo',
@@ -38,8 +39,13 @@ export default (options = {}) => {
 			})
 
 			walker.on('end', () => resolve(
-				fileCheckPromiseChain
-					.then(() => changes)
+				fileCheckPromiseChain.then(() => ({
+					created_by: packageData.name,
+					patches: changes.map(change => ({
+						type: 'unidiff',
+						body: change,
+					}))
+				}))
 			))
 
 			walker.start()
