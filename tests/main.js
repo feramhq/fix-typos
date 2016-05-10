@@ -21,13 +21,8 @@ Clone
   // as it might not actually have been cloned
   .then(() => Repository.open(clonedRepoPath))
   .then(repo => getTypoPatches({repo}))
-  .then(patches => {
-    assert(
-      patches.length === 3,
-      'Expected 3 patches an not %s',
-      patches.length
-    )
+  .then(patchCollection => {
+    assert.equal(patchCollection.patches.length, 3)
     log.info('Created patches ✔︎')
-    return patches
   })
   .catch(error => log.error(error))
