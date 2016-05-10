@@ -1,5 +1,5 @@
 // For C
 
 export default {
-	gotos: 'goto',
+  gotos: 'goto',
 }

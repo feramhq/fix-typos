@@ -8,24 +8,24 @@ import isScript from '../helpers/isScript'
 
 
 export default [
-	{
-		name: 'general',
-		map: generalTypoMap,
-		test: () => true,
-	},
-	{
-		name: 'style',
-		map: styleTypoMap,
-		test: isStyle,
-	},
-	{
-		name: 'script',
-		map: scriptTypoMap,
-		test: isScript,
-	},
-	{
-		name: 'c',
-		map: cTypoMap,
-		test: filePath => /\.c$/.test(filePath),
-	},
+  {
+    name: 'general',
+    map: generalTypoMap,
+    test: () => true,
+  },
+  {
+    name: 'style',
+    map: styleTypoMap,
+    test: isStyle,
+  },
+  {
+    name: 'script',
+    map: scriptTypoMap,
+    test: isScript,
+  },
+  {
+    name: 'c',
+    map: cTypoMap,
+    test: filePath => /\.c$/.test(filePath),
+  },
 ]
