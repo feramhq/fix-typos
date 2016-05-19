@@ -1,5 +1,5 @@
 // For C
 
-export default {
+module.exports = {
   gotos: 'goto',
 }

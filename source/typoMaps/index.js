@@ -1,13 +1,13 @@
-import generalTypoMap from './general'
-import styleTypoMap from './style'
-import scriptTypoMap from './script'
-import cTypoMap from './c'
+const generalTypoMap = require('./general')
+const styleTypoMap = require('./style')
+const scriptTypoMap = require('./script')
+const cTypoMap = require('./c')
 
-import isStyle from '../helpers/isStyle'
-import isScript from '../helpers/isScript'
+const isStyle = require('../helpers/isStyle')
+const isScript = require('../helpers/isScript')
 
 
-export default [
+module.exports = [
   {
     name: 'general',
     map: generalTypoMap,

@@ -1,6 +1,6 @@
-import isBinary from 'is-binary'
+const isBinary = require('is-binary')
 
-export default (filePath, fileContent) => {
+module.exports = (filePath, fileContent) => {
   return !isBinary(fileContent) &&
     !/\.min\.(css|js|html)$/.test(filePath) &&
     !/\.(css|js)\.map$/.test(filePath)

@@ -1,6 +1,6 @@
 // For css, styl, scss, sass and less
 
-export default {
+module.exports = {
   aligne: 'align',
   atachment: 'attachment',
   blokc: 'block',

@@ -1,4 +1,4 @@
-export default (filePath) => {
+module.exports = (filePath) => {
   const flags = 'i'
   const regex = new RegExp(
     '\\.(' +

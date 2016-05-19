@@ -1,6 +1,6 @@
 // Based on https://en.wikipedia.org/wiki/Wikipedia:Lists_of_common_misspellings
 
-export default {
+module.exports = {
   // Re-add when font-awesome 5 was released
   // bouy: 'buoy',
 

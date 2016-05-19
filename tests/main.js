@@ -1,9 +1,9 @@
-import path from 'path'
-import assert from 'assert'
+const path = require('path')
+const assert = require('assert')
 
-import bunyan from 'bunyan'
-import {Repository, Clone} from 'nodegit'
-import getTypoPatches from '..'
+const bunyan = require('bunyan')
+const {Repository, Clone} = require('nodegit')
+const getTypoPatches = require('..')
 
 const log = bunyan.createLogger({
   name: 'tests',

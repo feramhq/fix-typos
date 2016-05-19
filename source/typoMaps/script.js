@@ -1,6 +1,6 @@
 // For JavaScript, EcmaScript, CoffeeScript, TypeScript and dialects
 
-export default {
+module.exports = {
   abstact: 'abstract',
   abstarct: 'abstract',
   abstrcat: 'abstract',

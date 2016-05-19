@@ -1,7 +1,7 @@
-import getDiffForFile from './getDiffForFile'
-import packageData from '../package.json'
+const getDiffForFile = require('./getDiffForFile')
+const packageData = require('../package.json')
 
-export default (options = {}) => {
+module.exports = (options = {}) => {
   const {repo, ignore} = options
 
   return repo

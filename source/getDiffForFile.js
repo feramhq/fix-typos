@@ -1,10 +1,10 @@
 // Diff can only be required and not imported
 const diff = require('diff')
-import bunyan from 'bunyan'
+const bunyan = require('bunyan')
 
-import replaceTypos from './replaceTypos'
-import typoMapObjects from './typoMaps'
-import isHumanReadable from './helpers/isHumanReadable'
+const replaceTypos = require('./replaceTypos')
+const typoMapObjects = require('./typoMaps')
+const isHumanReadable = require('./helpers/isHumanReadable')
 
 const log = bunyan.createLogger({
   name: 'get-diff',
@@ -12,7 +12,7 @@ const log = bunyan.createLogger({
 })
 
 
-export default (options = {}) => {
+module.exports = (options = {}) => {
   const {entry} = options
   const filePath = entry.path()
 

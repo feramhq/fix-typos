@@ -1,4 +1,4 @@
-import bunyan from 'bunyan'
+const bunyan = require('bunyan')
 
 const log = bunyan.createLogger({
   name: 'fix-typo',
@@ -10,7 +10,7 @@ function isLowerCase (string) {
     string !== string.toUpperCase()
 }
 
-export default (fileContent, filePath, typoMap) => {
+module.exports = (fileContent, filePath, typoMap) => {
   let isChanged = false
 
   for (const typo in typoMap) {
