@@ -7,6 +7,8 @@
     "unit-tests": "babel-node tests/main | bunyan --output short --level info",
     "lint": "eslint --ignore-path .gitignore .",
     "test": "npm run lint && npm run unit-tests",
+    "precommit": "npm run lint",
+    "prepush": "npm test",
     "prepublish": "npm test"
   },
   "keywords": [
@@ -25,6 +27,7 @@
   },
   "devDependencies": {
     "eslint": "^2.9.0",
+    "husky": "^0.11.4",
     "javascript-styleguide": "^0.2.2"
   },
   "directories": {
