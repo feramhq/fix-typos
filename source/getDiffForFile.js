@@ -11,6 +11,8 @@ const log = bunyan.createLogger({
   level: 0,
 })
 
+const notHumanReadableError = new Error('Not human readable')
+
 
 module.exports = (options = {}) => {
   const {entry} = options
@@ -23,8 +25,9 @@ module.exports = (options = {}) => {
       let newFileContent = fileContent
       let contentWasChanged = false
 
-      if  (!isHumanReadable(filePath, fileContent)) {
-        throw new Error('not human readable')
+      if (!isHumanReadable(filePath, fileContent)) {
+        log.debug(`${filePath} is not human readable`)
+        throw notHumanReadableError
       }
 
       typoMapObjects.forEach(typoMapObject => {
@@ -68,5 +71,8 @@ module.exports = (options = {}) => {
         return diffText
       }
     })
-    .catch(error => log.error(error))
+    .catch(error => {
+      if (error === notHumanReadableError) return
+      log.error(error)
+    })
 }
