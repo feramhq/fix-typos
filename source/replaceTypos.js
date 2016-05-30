@@ -1,14 +1,10 @@
 const bunyan = require('bunyan')
+const Case = require('case')
 
 const log = bunyan.createLogger({
   name: 'fix-typo',
   level: 0,
 })
-
-function isLowerCase (string) {
-  return string === string.toLowerCase() &&
-    string !== string.toUpperCase()
-}
 
 module.exports = (fileContent, filePath, typoMap) => {
   let isChanged = false
@@ -26,14 +22,7 @@ module.exports = (fileContent, filePath, typoMap) => {
       fileContent = fileContent.replace(
         typoRegex,
         (match, p1, p2) => {
-          const replacement = p1 +
-            (isLowerCase(match[1]) ?
-              typoMap[typo] :
-              typoMap[typo]
-                .slice(0, 1)
-                .toUpperCase() + typoMap[typo].slice(1)
-            ) +
-            p2
+          const replacement = p1 + Case[Case.of(match)](typoMap[typo]) + p2
 
           log.trace(
             '%s -> %s in %s',
