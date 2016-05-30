@@ -3,7 +3,7 @@ const diff = require('diff')
 const bunyan = require('bunyan')
 
 const replaceTypos = require('./replaceTypos')
-const typoMapObjects = require('./typoMaps')
+const getTypoMaps = require('./getTypoMaps')
 const isHumanReadable = require('./helpers/isHumanReadable')
 
 const log = bunyan.createLogger({
@@ -30,40 +30,42 @@ module.exports = (options = {}) => {
         throw notHumanReadableError
       }
 
-      typoMapObjects.forEach(typoMapObject => {
+      return getTypoMaps.then(typoMapObjects => {
+        typoMapObjects.forEach(typoMapObject => {
 
-        log.trace(
-          'Check if %s is a %s file: %s',
-          filePath,
-          typoMapObject.name,
-          typoMapObject.test(filePath)
-        )
+          log.trace(
+            'Check if %s is a %s file: %s',
+            filePath,
+            typoMapObject.name,
+            typoMapObject.test(filePath)
+          )
 
-        if (!typoMapObject.test(filePath)) {
-          return
+          if (!typoMapObject.test(filePath)) {
+            return
+          }
+
+          const changedFileContent = replaceTypos(
+            newFileContent,
+            filePath,
+            typoMapObject.map
+          )
+          if (changedFileContent) {
+            contentWasChanged = true
+            newFileContent = changedFileContent
+          }
+        })
+
+        if (!contentWasChanged) {
+          log.debug('Nothing was fixed in %s', filePath)
         }
-
-        const changedFileContent = replaceTypos(
-          newFileContent,
-          filePath,
-          typoMapObject.map
-        )
-        if (changedFileContent) {
-          contentWasChanged = true
-          newFileContent = changedFileContent
+        else {
+          return diff.createPatch(
+            filePath,
+            fileContent,
+            newFileContent
+          )
         }
       })
-
-      if (!contentWasChanged) {
-        log.debug('Nothing was fixed in %s', filePath)
-      }
-      else {
-        return diff.createPatch(
-          filePath,
-          fileContent,
-          newFileContent
-        )
-      }
     })
     .then(diffText => {
       if (diffText) {

@@ -1,0 +1,208 @@
+abstract:
+  - abstact
+  - abstarct
+  - abstrcat
+  - abtsract
+align: aligne
+arguments:
+  - argments
+  - argmuents
+  - argumnts
+attachment: atachment
+background: backgruond
+block:
+  - blokc
+  - bolck
+  - backgound
+  - backgroud
+  - backgruond
+boolean:
+  - bolean
+  - boolaen
+border: boder
+bottom: botom
+break: braek
+byte: byet
+case:
+  - caes
+  - csae
+catch: cach
+char: chra
+class:
+  - clas
+  - clsas
+clear: claer
+color: colour
+const: cnost
+content:
+  - contnt
+  - cntent
+continue: contiune
+cursor:
+  - cursr
+  - corsor
+debugger: debuger
+default:
+  - defautl
+  - defualt
+delete:
+  - delet
+  - dlete
+direction:
+  - drection
+  - dirction
+  - directon
+display:
+  - dipslay
+  - dsiplay
+  - dsplay
+  - disply
+double: duoble
+else: eles
+enum: enmu
+eval: evla
+export: exprot
+extends: extneds
+'false':
+  - flase
+  - fales
+family: famly
+final: fianl
+finally: finaly
+float: flaot
+font: fnot
+function:
+  - fnuction
+  - fucntion
+  - fucntoin
+  - funciton
+  - functino
+  - functoin
+  - fcuntion
+goto: gotos
+height:
+  - hieght
+  - heigth
+hsl: hls
+implements: implments
+import: improt
+inital: initl
+instanceof: instancoef
+int: itn
+interface: interfcae
+left: letf
+let: lte
+letter-spacing: letterspacing
+list-style: list-styl
+long: lnog
+loop: lopo
+margin: margn
+native:
+  - nativ
+  - natvie
+new: nwe
+no-repeat: norepeat
+normal: norml
+nowrap: no-wrap
+'null': nul
+opacity: opacty
+orphans: orphns
+outline: outlne
+overflow:
+  - ovrflow
+  - overflw
+package: pcakage
+padding:
+  - pading
+  - paddng
+page-break: page-braek
+position:
+  - positin
+  - positon
+private: priavte
+promise: pormise
+protected: portected
+public:
+  - pubilc
+  - pulbic
+quotes:
+  - qotes
+  - quots
+repeat: repaet
+repeat-x: x-repeat
+repeat-y: y-repeat
+return:
+  - retrun
+  - retrnu
+  - retunr
+rgb: rbg
+right:
+  - rihgt
+  - rigth
+sans-serif: san-serif
+short: shrot
+static: statice
+super: supre
+switch: swich
+synchronized:
+  - synchornized
+  - synchronised
+table: tabel
+table-layout:
+  - table-layuot
+  - table-layot
+text-align:
+  - text-algn
+  - txt-align
+text-decoration:
+  - text-decration
+  - text-decoraton
+  - text-decroation
+text-indent: text-indnt
+text-transform:
+  - text-transfrm
+  - text-transfrom
+then: thne
+this: thsi
+throw: thorw
+throws: thorws
+transient: trasnient
+'true':
+  - treu
+  - ture
+try: tyr
+typeof: typoef
+undefined:
+  - undefiend
+  - undefnied
+  - undeined
+unicode-bidi: unicde-bidi
+unless:
+  - unlses
+  - unelss
+unsigned:
+  - unsigend
+  - unsignd
+  - unisgned
+until:
+  - utnil
+  - untli
+var: vra
+vertical-align: verticl-align
+visibility:
+  - visbility
+  - visibilty
+  - visiblity
+void: viod
+volatile: volatiel
+when: whne
+while: whiele
+white-space:
+  - wihte-space
+  - whitspace
+width: widht
+with: wiht
+yield:
+  - yeild
+  - yiedl
+z-index: z-indx
