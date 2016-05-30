@@ -3,6 +3,8 @@ const assert = require('assert')
 
 const bunyan = require('bunyan')
 const {Repository, Clone} = require('nodegit')
+const del = require('del')
+
 const getTypoPatches = require('..')
 
 const log = bunyan.createLogger({
@@ -11,8 +13,10 @@ const log = bunyan.createLogger({
 })
 const clonedRepoPath = path.join(__dirname, 'broken')
 
-Clone
-  .clone('https://github.com/ferambot/broken', clonedRepoPath)
+del(clonedRepoPath, {force: true})
+  .then(() =>
+    Clone.clone('https://github.com/ferambot/broken', clonedRepoPath)
+  )
   // Ignore that git repo might already exist
   .catch(() => {})
   // Open repository always from path,

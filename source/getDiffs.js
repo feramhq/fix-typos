@@ -1,8 +1,20 @@
+const path = require('path')
+const fs = require('fs')
+const yaml = require('js-yaml')
+
 const getDiffForFile = require('./getDiffForFile')
 const packageData = require('../package.json')
+const ignoreFileYaml = fs.readFileSync(
+  path.join(__dirname, 'helpers/ignorePatterns.yaml'),
+  'utf-8'
+)
+const ignorePatterns = yaml.safeLoad(ignoreFileYaml)
+const ignoreRegexes = ignorePatterns.map(
+  pattern => new RegExp(pattern)
+)
 
 module.exports = (options = {}) => {
-  const {repo, ignore} = options
+  const {repo} = options
 
   return repo
     .getHeadCommit()
@@ -10,13 +22,15 @@ module.exports = (options = {}) => {
     .then(fileTree => new Promise((resolve, reject) => {
       let fileCheckPromiseChain = Promise.resolve()
       const changes = []
-
       const walker = fileTree.walk(true)
 
       walker.on('error', reject)
 
-      walker.on('entry', (entry) => {
-        if (ignore instanceof RegExp && ignore.test(entry.path())) {
+      walker.on('entry', entry => {
+        const mustBeIgnored = ignoreRegexes
+          .some(regex => regex.test(entry.path()))
+
+        if (mustBeIgnored) {
           return
         }
 

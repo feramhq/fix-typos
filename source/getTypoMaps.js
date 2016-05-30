@@ -14,6 +14,8 @@ const fileTypes = [
   },
   {
     name: 'general',
+    // Only human readable files are used anyways
+    // => No more filtering required
     test: () => true,
   },
   {
