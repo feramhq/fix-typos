@@ -1,6 +1,11 @@
 const path = require('path')
 const fs = require('fs')
 const yaml = require('js-yaml')
+const bunyan = require('bunyan')
+const log = bunyan.createLogger({
+  name: 'get typo diffs',
+  level: 0,
+})
 
 const getDiffForFile = require('./getDiffForFile')
 const packageData = require('../package.json')
@@ -31,6 +36,7 @@ module.exports = (options = {}) => {
           .some(regex => regex.test(entry.path()))
 
         if (mustBeIgnored) {
+          log.debug(`${entry.path()} is a vendor file and is ignored`)
           return
         }
 
@@ -45,16 +51,18 @@ module.exports = (options = {}) => {
           })
       })
 
-      walker.on('end', () => resolve(
-        fileCheckPromiseChain.then(() => ({
-          // eslint-disable-next-line camelcase
-          created_by: packageData.name,
-          patches: changes.map(change => ({
-            type: 'unidiff',
-            body: change,
-          })),
-        }))
-      ))
+      walker.on('end', () => {
+        fileCheckPromiseChain.then(() => {
+          resolve({
+            // eslint-disable-next-line camelcase
+            created_by: packageData.name,
+            patches: changes.map(change => ({
+              type: 'unidiff',
+              body: change,
+            })),
+          })
+        })
+      })
 
       walker.start()
     }))
