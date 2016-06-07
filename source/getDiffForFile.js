@@ -26,7 +26,7 @@ module.exports = (options = {}) => {
       let contentWasChanged = false
 
       if (!isHumanReadable(filePath, fileContent)) {
-        log.debug(`${filePath} is not human readable`)
+        log.debug(`Not human readable: ${filePath}`)
         throw notHumanReadableError
       }
 
@@ -56,7 +56,7 @@ module.exports = (options = {}) => {
         })
 
         if (!contentWasChanged) {
-          log.debug('Nothing was fixed in %s', filePath)
+          log.debug('Nothing was fixed: %s', filePath)
         }
         else {
           return diff.createPatch(

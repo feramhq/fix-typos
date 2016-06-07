@@ -11,7 +11,7 @@ module.exports = (fileContent, filePath, typoMap) => {
 
   for (const typo in typoMap) {
     if (typoMap.hasOwnProperty(typo)) {
-      const typoRegex = new RegExp(`(\\W)${typo}(\\W)`, 'gi')
+      const typoRegex = new RegExp(`(\\W)(${typo})(\\W)`, 'gi')
 
       if (!typoRegex.test(fileContent)) {
         continue
@@ -21,8 +21,8 @@ module.exports = (fileContent, filePath, typoMap) => {
 
       fileContent = fileContent.replace(
         typoRegex,
-        (match, p1, p2) => {
-          const replacement = p1 + Case[Case.of(match)](typoMap[typo]) + p2
+        (match, p1, p2, p3) => {
+          const replacement = p1 + Case[Case.of(p2)](typoMap[typo]) + p3
 
           log.trace(
             '%s -> %s in %s',

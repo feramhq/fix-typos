@@ -36,7 +36,7 @@ module.exports = (options = {}) => {
           .some(regex => regex.test(entry.path()))
 
         if (mustBeIgnored) {
-          log.debug(`${entry.path()} is a vendor file and is ignored`)
+          log.debug(`Vendor files are ignored: ${entry.path()}`)
           return
         }
 
