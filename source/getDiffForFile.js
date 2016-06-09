@@ -1,15 +1,15 @@
 // Diff can only be required and not imported
 const diff = require('diff')
 const bunyan = require('bunyan')
+const log = bunyan.createLogger({
+  name: 'get diff for file',
+  level: 0,
+})
 
 const replaceTypos = require('./replaceTypos')
 const getTypoMaps = require('./getTypoMaps')
 const isHumanReadable = require('./helpers/isHumanReadable')
-
-const log = bunyan.createLogger({
-  name: 'get-diff',
-  level: 0,
-})
+const fixIndefiniteArticle = require('./fixIndefiniteArticle')
 
 const notHumanReadableError = new Error('Not human readable')
 
@@ -30,42 +30,51 @@ module.exports = (options = {}) => {
         throw notHumanReadableError
       }
 
-      return getTypoMaps.then(typoMapObjects => {
-        typoMapObjects.forEach(typoMapObject => {
-
-          log.trace(
-            'Check if %s is a %s file: %s',
-            filePath,
-            typoMapObject.name,
-            typoMapObject.test(filePath)
-          )
-
-          if (!typoMapObject.test(filePath)) {
-            return
-          }
-
-          const changedFileContent = replaceTypos(
-            newFileContent,
-            filePath,
-            typoMapObject.map
-          )
-          if (changedFileContent) {
+      return Promise
+        .resolve(fixIndefiniteArticle(fileContent))
+        .then(fixedFileContent => {
+          if (fixedFileContent) {
+            newFileContent = fixedFileContent
             contentWasChanged = true
-            newFileContent = changedFileContent
+          }
+          return getTypoMaps
+        })
+        .then(typoMapObjects => {
+          typoMapObjects.forEach(typoMapObject => {
+
+            log.trace(
+              'Check if %s is a %s file: %s',
+              filePath,
+              typoMapObject.name,
+              typoMapObject.test(filePath)
+            )
+
+            if (!typoMapObject.test(filePath)) {
+              return
+            }
+
+            const changedFileContent = replaceTypos(
+              newFileContent,
+              filePath,
+              typoMapObject.map
+            )
+            if (changedFileContent) {
+              contentWasChanged = true
+              newFileContent = changedFileContent
+            }
+          })
+
+          if (!contentWasChanged) {
+            log.debug('Nothing was fixed: %s', filePath)
+          }
+          else {
+            return diff.createPatch(
+              filePath,
+              fileContent,
+              newFileContent
+            )
           }
         })
-
-        if (!contentWasChanged) {
-          log.debug('Nothing was fixed: %s', filePath)
-        }
-        else {
-          return diff.createPatch(
-            filePath,
-            fileContent,
-            newFileContent
-          )
-        }
-      })
     })
     .then(diffText => {
       if (diffText) {
