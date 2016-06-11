@@ -17,6 +17,7 @@ module.exports = {
   ],
   an: [
     'apricot',
+    'effort',
     'egg',
     'ESO',
     'elephant',
@@ -32,6 +33,7 @@ module.exports = {
   correctAToAn: [
     'apricot',
     'egg',
+    'effort',
     // 'ESO',
     'elephant',
     'honest',

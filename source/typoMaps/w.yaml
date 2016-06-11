@@ -16,7 +16,9 @@ was:
 wasn't: wasnt
 wayward: wayword
 weaponry: weaponary
-weather: wether
+weather:
+  - waether
+  - weathre
 Wednesday:
   - wendsay
   - wensday
@@ -37,6 +39,7 @@ whereas:
   - wherease
 wherever: whereever
 whether:
+  - wether
   - whethre
   - whther
 which:

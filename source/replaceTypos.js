@@ -1,25 +1,32 @@
-const bunyan = require('bunyan')
 const Case = require('case')
-
+const bunyan = require('bunyan')
 const log = bunyan.createLogger({
-  name: 'fix-typo',
+  name: 'fix typo',
   level: 0,
 })
 
-module.exports = (fileContent, filePath, typoMap) => {
+module.exports = (options = {}) => {
+  const {fileContent, filePath, typoMap, falsePositiveMaximum} = options
+
   let isChanged = false
+  let fixedFileContent
 
   for (const typo in typoMap) {
     if (typoMap.hasOwnProperty(typo)) {
+
+      // Words with more characters are unlikely to produce false positives
+      const minimumNumberOfCharacters = 7
+      const falsePositiveValue = 1 - (typo.length / minimumNumberOfCharacters)
+
+      if (falsePositiveValue > falsePositiveMaximum) continue
+
       const typoRegex = new RegExp(`(\\W)(${typo})(\\W)`, 'gi')
 
-      if (!typoRegex.test(fileContent)) {
-        continue
-      }
+      if (!typoRegex.test(fileContent)) continue
 
       isChanged = true
 
-      fileContent = fileContent.replace(
+      fixedFileContent = fileContent.replace(
         typoRegex,
         (match, p1, p2, p3) => {
           const replacement = p1 + Case[Case.of(p2)](typoMap[typo]) + p3
@@ -37,5 +44,5 @@ module.exports = (fileContent, filePath, typoMap) => {
     }
   }
 
-  return isChanged ? fileContent : null
+  return isChanged ? fixedFileContent : null
 }

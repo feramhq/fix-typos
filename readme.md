@@ -12,3 +12,8 @@ simply overwrite command line flags:
 ```
 npm test -- --level 0 --output inspect
 ```
+
+
+## Noteworthy Real Life Typos
+
+- https://en.wikipedia.org/wiki/HTTP_referer

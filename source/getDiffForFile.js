@@ -7,83 +7,102 @@ const log = bunyan.createLogger({
 })
 
 const replaceTypos = require('./replaceTypos')
-const getTypoMaps = require('./getTypoMaps')
+const typoMapsPromise = require('./typoMapsPromise')
 const isHumanReadable = require('./helpers/isHumanReadable')
-const fixIndefiniteArticle = require('./fixIndefiniteArticle')
+const fixIncorrectA = require('./fixIncorrectA')
+const fixIncorrectAn = require('./fixIncorrectAn')
 
-const notHumanReadableError = new Error('Not human readable')
+class NotHumanReadableError extends Error {
+  constructor (message) {
+    super(message)
+    this.name = 'NotHumanReadableError'
+    this.message = message
+  }
+}
+
+class NothingChangedError extends Error {
+  constructor (message) {
+    super(message)
+    this.name = 'NothingChangedError'
+    this.message = message
+  }
+}
 
 
 module.exports = (options = {}) => {
-  const {entry} = options
+  const {entry, falsePositiveMaximum = 1} = options
   const filePath = entry.path()
+
+  function fixTypos (typoMapObjects, fileContent, newFileContent) {
+    let contentWasChanged = false
+
+    typoMapObjects.forEach(typoMapObject => {
+      log.trace(
+        'Check if %s is a %s file: %s',
+        filePath,
+        typoMapObject.name,
+        typoMapObject.test(filePath)
+      )
+
+      if (!typoMapObject.test(filePath)) return
+
+      const changedFileContent = replaceTypos({
+        fileContent: newFileContent,
+        filePath,
+        typoMap: typoMapObject.map,
+        falsePositiveMaximum,
+      })
+
+      if (changedFileContent) {
+        contentWasChanged = true
+        newFileContent = changedFileContent
+      }
+    })
+
+    if (!contentWasChanged) return false
+
+    return diff.createPatch(
+      filePath,
+      fileContent,
+      newFileContent
+    )
+  }
 
   return entry
     .getBlob()
     .then(blob => blob.toString())
     .then(fileContent => {
-      let newFileContent = fileContent
-      let contentWasChanged = false
-
       if (!isHumanReadable(filePath, fileContent)) {
         log.debug(`Not human readable: ${filePath}`)
-        throw notHumanReadableError
+        throw new NotHumanReadableError(filePath)
       }
 
-      return Promise
-        .resolve(fixIndefiniteArticle(fileContent))
-        .then(fixedFileContent => {
-          if (fixedFileContent) {
-            newFileContent = fixedFileContent
-            contentWasChanged = true
-          }
-          return getTypoMaps
-        })
-        .then(typoMapObjects => {
-          typoMapObjects.forEach(typoMapObject => {
+      const falsePositiveValue = 0.5 // for fixIndefiniteArticle
+      let promiseChain = Promise.resolve(fileContent)
 
-            log.trace(
-              'Check if %s is a %s file: %s',
-              filePath,
-              typoMapObject.name,
-              typoMapObject.test(filePath)
-            )
+      if (falsePositiveValue < falsePositiveMaximum) {
+        const fixedContent = fixIncorrectA(fileContent)
+        const fixedTwice = fixIncorrectAn(fixedContent || fileContent)
 
-            if (!typoMapObject.test(filePath)) {
-              return
-            }
-
-            const changedFileContent = replaceTypos(
-              newFileContent,
-              filePath,
-              typoMapObject.map
-            )
-            if (changedFileContent) {
-              contentWasChanged = true
-              newFileContent = changedFileContent
-            }
-          })
-
-          if (!contentWasChanged) {
-            log.debug('Nothing was fixed: %s', filePath)
-          }
-          else {
-            return diff.createPatch(
-              filePath,
-              fileContent,
-              newFileContent
-            )
-          }
-        })
-    })
-    .then(diffText => {
-      if (diffText) {
-        log.debug({filePath, diffText})
-        return diffText
+        promiseChain = promiseChain.then(() => fixedTwice || fileContent)
       }
+
+      return promiseChain
+        .then(fixedContent => {
+          return typoMapsPromise.then(typoMapObjects =>
+            fixTypos(typoMapObjects, fileContent, fixedContent)
+          )
+        })
+        .then(diffText => {
+          log.debug({filePath, diffText})
+          return diffText
+        })
     })
     .catch(error => {
-      if (error === notHumanReadableError) return
+      if (error instanceof NotHumanReadableError) return
+      if (error instanceof NothingChangedError) {
+        return
+      }
       log.error(error)
     })
 }
