@@ -16,4 +16,7 @@ npm test -- --level 0 --output inspect
 
 ## Noteworthy Real Life Typos
 
-- https://en.wikipedia.org/wiki/HTTP_referer
+- "referer" instead of "referrer"
+  https://en.wikipedia.org/wiki/HTTP_referer
+- "fullfill" instead of "fulfill"
+  https://github.com/DmitryBaranovskiy/raphael/pull/1047
