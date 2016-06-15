@@ -19,51 +19,48 @@ const ignoreRegexes = ignorePatterns.map(
 )
 
 module.exports = (options = {}) => {
-  const {repo} = options
+  const {fileTree} = options
 
-  return repo
-    .getHeadCommit()
-    .then(commit => commit.getTree())
-    .then(fileTree => new Promise((resolve, reject) => {
-      let fileCheckPromiseChain = Promise.resolve()
-      const changes = []
-      const walker = fileTree.walk(true)
+  return new Promise((resolve, reject) => {
+    let fileCheckPromiseChain = Promise.resolve()
+    const changes = []
+    const walker = fileTree.walk(true)
 
-      walker.on('error', reject)
+    walker.on('error', reject)
 
-      walker.on('entry', entry => {
-        const mustBeIgnored = ignoreRegexes
-          .some(regex => regex.test(entry.path()))
+    walker.on('entry', entry => {
+      const mustBeIgnored = ignoreRegexes
+        .some(regex => regex.test(entry.path()))
 
-        if (mustBeIgnored) {
-          log.debug(`Vendor files are ignored: ${entry.path()}`)
-          return
-        }
+      if (mustBeIgnored) {
+        log.debug(`Vendor files are ignored: ${entry.path()}`)
+        return
+      }
 
-        fileCheckPromiseChain = fileCheckPromiseChain
-          .then(() => getDiffForFile(
-            Object.assign({}, {entry}, options)
-          ))
-          .then(fileChanges => {
-            if (fileChanges) {
-              changes.push(fileChanges)
-            }
-          })
-      })
+      fileCheckPromiseChain = fileCheckPromiseChain
+        .then(() => getDiffForFile(
+          Object.assign({}, {entry}, options)
+        ))
+        .then(fileChanges => {
+          if (fileChanges) {
+            changes.push(fileChanges)
+          }
+        })
+    })
 
-      walker.on('end', () => {
-        fileCheckPromiseChain.then(() => {
-          resolve({
-            // eslint-disable-next-line camelcase
-            created_by: packageData.name,
-            patches: changes.map(change => ({
-              type: 'unidiff',
-              body: change,
-            })),
-          })
+    walker.on('end', () => {
+      fileCheckPromiseChain.then(() => {
+        resolve({
+          // eslint-disable-next-line camelcase
+          created_by: packageData.name,
+          patches: changes.map(change => ({
+            type: 'unidiff',
+            body: change,
+          })),
         })
       })
+    })
 
-      walker.start()
-    }))
+    walker.start()
+  })
 }

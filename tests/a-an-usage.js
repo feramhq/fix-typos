@@ -25,6 +25,7 @@ module.exports = {
     'honorable',
     'Indian',
     'ontology',
+    'optimization',
     'orbit',
     'unknown',
     'uprising',

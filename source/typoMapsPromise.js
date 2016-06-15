@@ -100,4 +100,4 @@ function getTypoToWordMapPromise (fileTypeObject) {
 
 module.exports = Promise
   .all(fileTypes.map(getTypoToWordMapPromise))
-  .catch(log.error)
+  .catch(error => log.error(error))
