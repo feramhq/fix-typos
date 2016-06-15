@@ -14,7 +14,7 @@ module.exports = (fileContent) => {
   const start = /((?:[ .?!,;\n\t]|^)[aA])/.source
   const incorrectAn = new RegExp(
     start +
-    /n ([bcdfgj-np-tv-z]|h(?!o[nu][^s])|o(?![urn][^s])|u(?:s)|u(?:ni))/.source,
+    /n ([bcdfgj-np-tv-z]|h(?!o[nu][^s])|u(?:s|ni))/.source,
     'g'
   )
 
