@@ -1,5 +1,5 @@
 {
-  "name": "fix-typos",
+  "name": "@feram/fix-typos",
   "version": "0.1.0",
   "description": "Module for feram to fix typos",
   "main": "source/index.js",
@@ -15,7 +15,7 @@
     "feram"
   ],
   "author": "Adrian Sieber",
-  "license": "ISC",
+  "license": "UNLICENSED",
   "dependencies": {
     "bunyan": "^1.8.1",
     "case": "^1.4.1",
@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "eslint": "^3.1.1",
-    "husky": "^0.11.5",
+    "husky": "^0.11.6",
     "javascript-styleguide": "^0.2.2"
   },
   "directories": {
