@@ -1,6 +1,6 @@
 {
   "name": "@feram/fix-typos",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Module for feram to fix typos",
   "main": "source/index.js",
   "scripts": {
