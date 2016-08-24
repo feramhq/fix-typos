@@ -1,11 +1,7 @@
 const wordCase = require('case')
-const bunyan = require('bunyan')
-const log = bunyan.createLogger({
-  name: 'fix typo',
-  level: 0,
-})
 
-module.exports = ({typo, correction} = {}) => (fileContent) => {
+module.exports = (options = {}) => (fileContent) => {
+  const {typo, correction, log} = options
   const typoRegex = new RegExp(`(\\W)(${typo})(\\W)`, 'gi')
 
   if (!typoRegex.test(fileContent)) return false

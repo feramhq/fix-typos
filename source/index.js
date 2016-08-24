@@ -1,5 +1,11 @@
 const typokit = require('typokit')
 const getTypoFixFunction = require('./getTypoFixFunction')
+const bunyan = require('bunyan')
+const defaultLog = bunyan.createLogger({
+  name: 'fix typo',
+  level: 0,
+})
+let log
 
 function* generatorFunction (typoMap) {
   for (const typo in typoMap) {
@@ -14,11 +20,18 @@ function* generatorFunction (typoMap) {
         type: 'string',
         description: `A text containing the typo "${typo}"`,
       },
-      function: getTypoFixFunction({typo, correction}),
+      function: getTypoFixFunction({typo, correction, log}),
     }
   }
 }
 
-module.exports = () => typokit
-  .typoToWordPromise
-  .then(generatorFunction)
+module.exports = (options = {}) => {
+  const {log: currentLog} = options
+
+  if (currentLog) log = currentLog.child({fixFunction: 'fix-typo-'})
+  else log = defaultLog
+
+  return typokit
+    .typoToWordPromise
+    .then(generatorFunction)
+}
