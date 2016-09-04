@@ -1,8 +1,13 @@
 const wordCase = require('case')
 
 module.exports = (options = {}) => {
-  const {typo, correction, log} = options
-  const pattern = `(\\W)(${typo})(\\W)`
+  const {
+    typo,
+    correction,
+    log,
+    maximumLineLength = 1000,
+  } = options
+  const pattern = `(^|\\W)(${typo})(\\W|$)`
   const localTypoRegex = new RegExp(pattern, 'i')
   const globalTypoRegex = new RegExp(pattern, 'gi')
   const correctionIncludesDash = correction.includes('-')
@@ -29,6 +34,16 @@ module.exports = (options = {}) => {
   return (fileContent) => {
     if (!localTypoRegex.test(fileContent)) return false
 
-    return fileContent.replace(globalTypoRegex, replacer)
+    if (!maximumLineLength) {
+      return fileContent.replace(globalTypoRegex, replacer)
+    }
+
+    return fileContent
+      .split('\n')
+      .map(line => line.length > maximumLineLength
+        ? line
+        : line.replace(globalTypoRegex, replacer)
+      )
+      .join('\n')
   }
 }

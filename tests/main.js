@@ -70,6 +70,38 @@ const log = bunyan.createLogger({
 }
 
 {
+  process.stdout.write('Fix typo at the start of a line')
+  const getTypoFixFunction = require('../source/getTypoFixFunction')
+  const incorrect = 'exerpt should be corrected'
+  const correct = 'excerpt should be corrected'
+
+  const fixFunction = getTypoFixFunction({
+    typo: 'exerpt',
+    correction: 'excerpt',
+    log,
+  })
+
+  assert.equal(fixFunction(incorrect), correct)
+  process.stdout.write(' ✔\n')
+}
+
+{
+  process.stdout.write('Fix typo at the end of a line')
+  const getTypoFixFunction = require('../source/getTypoFixFunction')
+  const incorrect = 'Should be corrected: exerpt'
+  const correct = 'Should be corrected: excerpt'
+
+  const fixFunction = getTypoFixFunction({
+    typo: 'exerpt',
+    correction: 'excerpt',
+    log,
+  })
+
+  assert.equal(fixFunction(incorrect), correct)
+  process.stdout.write(' ✔\n')
+}
+
+{
   process.stdout.write('Fixing typos with spaces')
   const getTypoFixFunction = require('../source/getTypoFixFunction')
   const incorrect = 'The words "coca cola" should be corrected'
