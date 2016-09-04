@@ -1,25 +1,34 @@
 const wordCase = require('case')
 
-module.exports = (options = {}) => (fileContent) => {
+module.exports = (options = {}) => {
   const {typo, correction, log} = options
-  const typoRegex = new RegExp(`(\\W)(${typo})(\\W)`, 'gi')
+  const pattern = `(\\W)(${typo})(\\W)`
+  const localTypoRegex = new RegExp(pattern, 'i')
+  const globalTypoRegex = new RegExp(pattern, 'gi')
+  const correctionIncludesDash = correction.includes('-')
 
-  if (!typoRegex.test(fileContent)) return false
 
-  const fixedFileContent = fileContent.replace(
-    typoRegex,
-    (match, p1, p2, p3) => {
-      const replacement = p1 + wordCase[wordCase.of(p2)](correction) + p3
+  function replacer (match, p1, p2, p3) {
+    const fixedTypo = wordCase[wordCase.of(p2)](correction)
+    const replacementString = p1 +
+      (correctionIncludesDash
+        ? fixedTypo.replace(/ /g, '-')
+        : fixedTypo) +
+      p3
 
-      log.trace(
-        '%s -> %s in %s',
-        JSON.stringify(match),
-        JSON.stringify(replacement)
-      )
+    log.trace(
+      '%s -> %s',
+      JSON.stringify(match),
+      JSON.stringify(replacementString)
+    )
 
-      return replacement
-    }
-  )
+    return replacementString
+  }
 
-  return fixedFileContent
+
+  return (fileContent) => {
+    if (!localTypoRegex.test(fileContent)) return false
+
+    return fileContent.replace(globalTypoRegex, replacer)
+  }
 }
