@@ -116,3 +116,28 @@ const log = bunyan.createLogger({
   assert.equal(fixFunction(incorrect), correct)
   process.stdout.write(' ✔\n')
 }
+
+{
+  process.stdout.write('Ignore long lines')
+  const getTypoFixFunction = require('../source/getTypoFixFunction')
+  const incorrect = 'Should be corrected: abotu '
+  const correct = 'Should be corrected: about '
+
+  const fixFunction = getTypoFixFunction({
+    typo: 'abotu',
+    correction: 'about',
+    log,
+  })
+
+  assert.notEqual(
+    fixFunction(
+      incorrect
+        .repeat(100)
+        .slice(0, 1001)
+    ),
+    correct
+      .repeat(100)
+      .slice(0, 1001)
+  )
+  process.stdout.write(' ✔\n')
+}
