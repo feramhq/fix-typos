@@ -17,8 +17,13 @@ function* generatorFunction (typoMap) {
       description: `This function corrects the typo "${typo
         }" to "${correction}"`,
       signature: {
-        type: 'string',
-        description: `A text containing the typo "${typo}"`,
+        type: 'object',
+        properties: {
+          text: {type: 'string'},
+          filePath: {type: 'string'},
+          repoPath: {type: 'string'},
+        },
+        returnType: 'patchObjects',
       },
       function: getTypoFixFunction({typo, correction, log}),
     }

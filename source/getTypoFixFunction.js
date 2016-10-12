@@ -1,4 +1,5 @@
 const wordCase = require('case')
+const buildPatch =  require('../source/buildPatch.js')
 
 module.exports = (options = {}) => {
   const {
@@ -31,19 +32,33 @@ module.exports = (options = {}) => {
   }
 
 
-  return (fileContent) => {
+  return (args = {}) => {
+    const {text: fileContent, fileName} = args
     if (!localTypoRegex.test(fileContent)) return false
 
-    if (!maximumLineLength) {
-      return fileContent.replace(globalTypoRegex, replacer)
-    }
+    const patches = []
+    const lines = fileContent.split('\n')
 
-    return fileContent
-      .split('\n')
-      .map(line => line.length > maximumLineLength
-        ? line
-        : line.replace(globalTypoRegex, replacer)
-      )
-      .join('\n')
+    lines.forEach((lineContent, lineIndex) => {
+      const lineNumber = lineIndex + 1
+      if (lineContent.length < maximumLineLength) {
+        if (localTypoRegex.test(lineContent)) {
+          patches.push({
+            type: 'unidiff',
+            fileName,
+            body: buildPatch(
+              fileName,
+              lineNumber,
+              lineContent,
+              lineContent.replace(globalTypoRegex, replacer)
+            ),
+          })
+        }
+      }
+    })
+
+    return patches.length
+      ? patches
+      : null
   }
 }

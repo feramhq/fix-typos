@@ -1,17 +1,20 @@
 const assert = require('assert')
-const fixTypos = require('..')
+
 const isIterable = require('is-iterable')
 const StreamTester = require('streamtester')
+
+const buildPatch =  require('../source/buildPatch.js')
+const fixTypos = require('..')
 const streamTester = new StreamTester({
   test: (chunk) =>
     assert.equal(JSON.parse(chunk).name, 'test custom log'),
 })
-
 const bunyan = require('bunyan')
 const log = bunyan.createLogger({
   name: 'fix typos tests',
   level: 'error',
 })
+
 
 {
   process.stdout.write('General usage')
@@ -55,17 +58,28 @@ const log = bunyan.createLogger({
 
 {
   process.stdout.write('Fixing typos')
+
   const getTypoFixFunction = require('../source/getTypoFixFunction')
   const incorrect = 'The word "manny" should be corrected'
   const correct = 'The word "many" should be corrected'
+  const fileName = 'readme.md'
 
   const fixFunction = getTypoFixFunction({
     typo: 'manny',
     correction: 'many',
     log,
   })
+  const expectedPatches = [{
+    type: 'unidiff',
+    fileName,
+    body: buildPatch(fileName, 1, incorrect, correct),
+  }]
+  const actualPatches = fixFunction({
+    text: incorrect,
+    fileName,
+  })
 
-  assert.equal(fixFunction(incorrect), correct)
+  assert.deepStrictEqual(expectedPatches, actualPatches)
   process.stdout.write(' ✔\n')
 }
 
@@ -74,14 +88,23 @@ const log = bunyan.createLogger({
   const getTypoFixFunction = require('../source/getTypoFixFunction')
   const incorrect = 'exerpt should be corrected'
   const correct = 'excerpt should be corrected'
-
+  const fileName = 'readme.md'
   const fixFunction = getTypoFixFunction({
     typo: 'exerpt',
     correction: 'excerpt',
     log,
   })
+  const expectedPatches = [{
+    type: 'unidiff',
+    fileName,
+    body: buildPatch(fileName, 1, incorrect, correct),
+  }]
+  const actualPatches = fixFunction({
+    text: incorrect,
+    fileName,
+  })
 
-  assert.equal(fixFunction(incorrect), correct)
+  assert.deepStrictEqual(expectedPatches, actualPatches)
   process.stdout.write(' ✔\n')
 }
 
@@ -90,14 +113,23 @@ const log = bunyan.createLogger({
   const getTypoFixFunction = require('../source/getTypoFixFunction')
   const incorrect = 'Should be corrected: exerpt'
   const correct = 'Should be corrected: excerpt'
-
+  const fileName = 'readme.md'
   const fixFunction = getTypoFixFunction({
     typo: 'exerpt',
     correction: 'excerpt',
     log,
   })
+  const expectedPatches = [{
+    type: 'unidiff',
+    fileName,
+    body: buildPatch(fileName, 1, incorrect, correct),
+  }]
+  const actualPatches = fixFunction({
+    text: incorrect,
+    fileName,
+  })
 
-  assert.equal(fixFunction(incorrect), correct)
+  assert.deepStrictEqual(expectedPatches, actualPatches)
   process.stdout.write(' ✔\n')
 }
 
@@ -106,14 +138,23 @@ const log = bunyan.createLogger({
   const getTypoFixFunction = require('../source/getTypoFixFunction')
   const incorrect = 'The words "coca cola" should be corrected'
   const correct = 'The words "coca-cola" should be corrected'
-
+  const fileName = 'readme.md'
   const fixFunction = getTypoFixFunction({
     typo: 'coca cola',
     correction: 'coca-cola',
     log,
   })
+  const expectedPatches = [{
+    type: 'unidiff',
+    fileName,
+    body: buildPatch(fileName, 1, incorrect, correct),
+  }]
+  const actualPatches = fixFunction({
+    text: incorrect,
+    fileName,
+  })
 
-  assert.equal(fixFunction(incorrect), correct)
+  assert.deepStrictEqual(expectedPatches, actualPatches)
   process.stdout.write(' ✔\n')
 }
 
