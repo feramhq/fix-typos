@@ -73,6 +73,7 @@ const log = bunyan.createLogger({
     type: 'unidiff',
     fileName,
     body: buildPatch(fileName, 1, incorrect, correct),
+    containsFix: true,
   }]
   const actualPatches = fixFunction({
     text: incorrect,
@@ -98,6 +99,7 @@ const log = bunyan.createLogger({
     type: 'unidiff',
     fileName,
     body: buildPatch(fileName, 1, incorrect, correct),
+    containsFix: true,
   }]
   const actualPatches = fixFunction({
     text: incorrect,
@@ -123,6 +125,7 @@ const log = bunyan.createLogger({
     type: 'unidiff',
     fileName,
     body: buildPatch(fileName, 1, incorrect, correct),
+    containsFix: true,
   }]
   const actualPatches = fixFunction({
     text: incorrect,
@@ -148,6 +151,7 @@ const log = bunyan.createLogger({
     type: 'unidiff',
     fileName,
     body: buildPatch(fileName, 1, incorrect, correct),
+    containsFix: true,
   }]
   const actualPatches = fixFunction({
     text: incorrect,

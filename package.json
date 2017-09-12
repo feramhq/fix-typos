@@ -17,14 +17,14 @@
   "author": "Adrian Sieber",
   "license": "UNLICENSED",
   "dependencies": {
-    "bunyan": "^1.8.1",
-    "case": "^1.4.1",
+    "bunyan": "^1.8.12",
+    "case": "^1.5.3",
     "is-iterable": "^1.1.0",
     "typokit": "^0.2.1"
   },
   "devDependencies": {
-    "eslint": "^3.4.0",
-    "husky": "^0.11.7",
+    "eslint": "^4.6.1",
+    "husky": "^0.14.3",
     "javascript-styleguide": "^1.0.0",
     "streamtester": "^0.2.0"
   },

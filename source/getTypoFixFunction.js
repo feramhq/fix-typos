@@ -52,6 +52,7 @@ module.exports = (options = {}) => {
               lineContent,
               lineContent.replace(globalTypoRegex, replacer)
             ),
+            containsFix: true,
           })
         }
       }

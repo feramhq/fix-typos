@@ -14,8 +14,8 @@ function* generatorFunction (typoMap) {
     const correction = typoMap[typo]
     yield {
       name: `fix-typo-${typo}`,
-      description: `This function corrects the typo "${typo
-        }" to "${correction}"`,
+      description:
+        `This function corrects the typo "${typo}" to "${correction}"`,
       signature: {
         type: 'object',
         properties: {
