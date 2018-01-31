@@ -5,14 +5,13 @@
   "main": "source/index.js",
   "scripts": {
     "unit-tests": "node tests/main",
-    "lint": "eslint --ignore-path .gitignore .",
-    "test": "npm run lint && npm run unit-tests",
-    "precommit": "npm run lint",
-    "prepush": "npm test",
-    "prepublish": "npm test"
+    "lint": "eslint --ignore-path .gitignore --max-warnings 0 .",
+    "test": "yarn lint && yarn unit-tests"
   },
   "keywords": [
-    "feram"
+    "feram",
+    "typo",
+    "fixing-module"
   ],
   "author": "Adrian Sieber",
   "license": "UNLICENSED",
@@ -24,6 +23,7 @@
   },
   "devDependencies": {
     "eslint": "^4.6.1",
+    "eslint-config-javascript": "^1.3.0",
     "husky": "^0.14.3",
     "javascript-styleguide": "^1.0.0",
     "streamtester": "^0.2.0"
@@ -33,14 +33,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ferambot/fix-typos.git"
+    "url": "git+https://github.com/feramhq/fix-typos.git"
   },
   "bugs": {
-    "url": "https://github.com/ferambot/fix-typos/issues"
+    "url": "https://github.com/feramhq/fix-typos/issues"
   },
-  "homepage": "https://github.com/ferambot/fix-typos#readme",
+  "homepage": "https://github.com/feramhq/fix-typos#readme",
   "eslintConfig": {
-    "root": true,
-    "extends": "./node_modules/javascript-styleguide/.eslintrc.yaml"
+    "extends": "eslint-config-javascript"
   }
 }
